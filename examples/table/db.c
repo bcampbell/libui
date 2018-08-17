@@ -12,69 +12,69 @@ static void randomiseRecord(Record *r);
 
 Record* dbNewRecord()
 {
-    Record* r;
-    r = (Record*)malloc(sizeof(Record));
-    randomiseRecord(r);
-    return r;
+	Record* r;
+	r = (Record*)malloc(sizeof(Record));
+	randomiseRecord(r);
+	return r;
 }
 
 void dbFreeRecord(Record *r)
 {
-    free((void*)r->Name);
+	free((void*)r->Name);
 }
 
 DB *dbNewDB()
 {
-    const int initialCap = 32;
-    DB* db;
-    db = malloc(sizeof(DB));
-    db->count = 0;
-    db->cap = initialCap;
-    db->records = malloc(sizeof(Record*) * db->cap);
-    return db;
+	const int initialCap = 32;
+	DB* db;
+	db = malloc(sizeof(DB));
+	db->count = 0;
+	db->cap = initialCap;
+	db->records = malloc(sizeof(Record*) * db->cap);
+	return db;
 }
 
 static void grow(DB *db) {
-    db->cap *= 2;
-    db->records = realloc(db->records, sizeof(Record*) * db->cap);
+	db->cap *= 2;
+	db->records = realloc(db->records, sizeof(Record*) * db->cap);
 }
 
 void dbFreeDB(DB *db)
 {
-    int i;
-    for (i=0; i<db->count; i++) {
-        dbFreeRecord(db->records[i]);
-    }
-    free(db->records);
-    free(db);
+	int i;
+	for (i=0; i<db->count; i++) {
+		dbFreeRecord(db->records[i]);
+	}
+	free(db->records);
+	free(db);
 }
 
 void dbAppend(DB *db, Record *r)
 {
-    if (db->count == db->cap) {
-        grow(db);
-    }
-    db->records[db->count] = r;
-    db->count++;
+	if (db->count == db->cap) {
+		grow(db);
+	}
+	db->records[db->count] = r;
+	db->count++;
 }
 
 int dbCount(DB *db)
 {
-    return db->count;
+	return db->count;
 }
 
 const Record *dbGet(DB *db, int idx)
 {
-    return db->records[idx];
+	return db->records[idx];
 }
 
 void dbDelete(DB *db, int idx)
 {
-    dbFreeRecord(db->records[idx]);
-    for(;idx < db->count - 1; idx++) {
-        db->records[idx] = db->records[idx+1];
-    }
-    db->count--;
+	dbFreeRecord(db->records[idx]);
+	for(;idx < db->count - 1; idx++) {
+		db->records[idx] = db->records[idx+1];
+	}
+	db->count--;
 }
 
 // guff to generate names and stats in bulk, based on the galaxy-generation code
