@@ -52,6 +52,12 @@ _add_example(datetime
 	${_EXAMPLE_RESOURCES_RC}
 )
 
+_add_example(destruc-table
+        destruc-table/main.c
+        ${_EXAMPLE_RESOURCES_RC}
+)
+
+
 add_custom_target(examples
 	DEPENDS
 		controlgallery
@@ -59,4 +65,5 @@ add_custom_target(examples
 		cpp-multithread
 		drawtext
 		timer
+        destruc-table
 		datetime)
