@@ -1,5 +1,14 @@
-// g++ -I .. -L ../build/out main.c -lui -lgdi32 -ld2d1 -lcomctl32 -luxtheme -ldwrite -lole32
-
+// minimal example to show windows table bug:
+//
+// After uiTableModelRowInserted() is called on a visible table,
+// the handler CellValue() function is called with an invalid
+// row number.
+//
+// This example shows a mocked-up dataset, and has an "add"
+// button below which adds a single row. Clicking "add" will
+// trigger the bug.
+//
+// See the assert() in handlerCellValue() below.
 
 #include <assert.h>
 #include <stdio.h>
@@ -33,6 +42,7 @@ static int handlerNumRows(uiTableModelHandler *h, uiTableModel *m)
 static uiTableValue *handlerCellValue(uiTableModelHandler *h, uiTableModel *m, int row, int col)
 {
 	char buf[32];
+	// THIS WILL TRIGGER after uiTableModelRowInserted() is called
 	assert(row<numrows);
 	sprintf(buf, "cell %d,%d\n", row,col);
 	return uiNewTableValueString(buf);
